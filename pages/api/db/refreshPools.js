@@ -2,7 +2,7 @@
 
 import {ethers} from 'ethers';
 import * as ethcall from 'ethcall';
-import db from '../../database/models/index';
+import db from '../../../database/models/index';
 
 const Provider = db.Provider;
 const MasterContract = db.MasterContract;
