@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Snapshot extends Model {
+  class Provider extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,16 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.User);
+      this.hasMany(models.MasterContract, { onDelete: 'cascade' });
     }
   };
-  Snapshot.init({
-    time: DataTypes.TIME,
-    wallet: DataTypes.JSON,
-    investments: DataTypes.JSON
+  Provider.init({
+    name: { type: DataTypes.STRING, unique: true },
+    website: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'Snapshot',
+    modelName: 'Provider',
   });
-  return Snapshot;
+  return Provider;
 };

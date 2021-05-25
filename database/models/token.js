@@ -1,9 +1,9 @@
 'use strict';
 const {
-  Model
+  Model,
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Snapshot extends Model {
+  class Token extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,16 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.User);
     }
   };
-  Snapshot.init({
-    time: DataTypes.TIME,
-    wallet: DataTypes.JSON,
-    investments: DataTypes.JSON
+  Token.init({
+    name: DataTypes.STRING,
+    address: {type: DataTypes.STRING, unique: true},
+    type: {type: DataTypes.STRING, defaultValue: 'BEP20'}, //BEP20 etc
+    isLp: {type: DataTypes.BOOLEAN, defaultValue: false},
   }, {
     sequelize,
-    modelName: 'Snapshot',
+    modelName: 'Token',
   });
-  return Snapshot;
+  return Token;
 };

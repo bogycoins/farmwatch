@@ -1,3 +1,13 @@
+//generate model files and migrations
 npx sequelize-cli model:generate --name User --attributes email:string,name:string,address:string
+npx sequelize-cli model:generate --name Snapshot --attributes time:time,wallet:json,investments:json
+npx sequelize-cli model:generate --name Provider --attributes name:string,website:string
+npx sequelize-cli model:generate --name MasterContract --attributes name:string,token:string,pendingTokenMethod:string,address:string,emissionRate:integer,totalAllocPoints:integer
+npx sequelize-cli model:generate --name Pool --attributes name:string,poolId:integer,lpToken:string,allocPoint:integer,accTokenPerShare:integer
+npx sequelize-cli model:generate --name Token --attributes name:string,address:string,type:string,isLp:boolean
 
-npx sequelize-cli model:generate --name Snapshot --attributes time:time,user:string,wallet:json
+
+Commands:
+//create a migration to include the associations
+sequelize-mig migration:make -n model-associations
+

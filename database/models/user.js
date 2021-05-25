@@ -11,10 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasMany(models.Snapshot, { onDelete: 'cascade' });
     }
   };
   User.init({
-    email: DataTypes.STRING,
+    email: { type: DataTypes.STRING, unique: true },
     name: DataTypes.STRING,
     address: DataTypes.STRING
   }, {
