@@ -1,4 +1,4 @@
-import db from '../../../database/models/index';
+import db from '/database/models/index';
 import {ethers} from 'ethers';
 
 const Provider = db.provider;
