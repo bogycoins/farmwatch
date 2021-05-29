@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Providers', [
+    return queryInterface.bulkInsert('providers', [
       {
         name: 'PantherSwap',
         website: 'https://pantherswap.com',
@@ -17,6 +17,6 @@ module.exports = {
     ]);
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Providers', null, {});
+    return queryInterface.bulkDelete('providers', null, {});
   },
 };

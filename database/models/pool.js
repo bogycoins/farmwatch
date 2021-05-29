@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.MasterContract);
+      this.belongsTo(models.masterContract);
+      // this.hasMany(models.Token);
     }
   };
   Pool.init({
@@ -22,12 +23,12 @@ module.exports = (sequelize, DataTypes) => {
     // accTokenPerShare: DataTypes.DOUBLE
   }, {
     sequelize,
-    modelName: 'Pool',
+    modelName: 'pool',
     indexes: [
       // Create a unique index on email
       {
         unique: true,
-        fields: ['poolId', 'MasterContractId']
+        fields: ['poolId', 'masterContractId']
       }]
   });
   return Pool;

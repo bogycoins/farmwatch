@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.MasterContract, { onDelete: 'cascade' });
+      this.hasMany(models.masterContract, { onDelete: 'cascade' });
     }
   };
   Provider.init({
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     website: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'Provider',
+    modelName: 'provider',
   });
   return Provider;
 };

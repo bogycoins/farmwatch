@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.Snapshot, { onDelete: 'cascade' });
+      this.hasMany(models.snapshot, { onDelete: 'cascade' });
     }
   };
   User.init({
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     address: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'User',
+    modelName: 'user',
   });
   return User;
 };

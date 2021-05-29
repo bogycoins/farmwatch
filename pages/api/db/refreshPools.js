@@ -2,15 +2,16 @@
 
 import {ethers} from 'ethers';
 import * as ethcall from 'ethcall';
+
 import db from '../../../database/models/index';
+import {getBscToken} from '../util/token_helper';
 
-const Provider = db.Provider;
-const MasterContract = db.MasterContract;
-const Pool = db.Pool;
-const Token = db.Token;
+const Provider = db.provider;
+const MasterContract = db.masterContract;
+const Pool = db.pool;
+const Token = db.token;
 
-const ChainProvider = new ethers.providers.JsonRpcProvider(
-    'https://bsc-dataseed2.binance.org');
+const ChainProvider = new ethers.providers.JsonRpcProvider('https://bsc-dataseed1.binance.org');
 
 async function loadContracts() {
   const providers = await Provider.findAll();
@@ -24,38 +25,46 @@ async function loadContracts() {
     const address = contract.address;
 
     //get master contract and check pool count
-    const chefContract = new ethers.Contract(contract.address, contract.abi,
-        ChainProvider);
+    const chefContract = new ethers.Contract(contract.address, contract.abi, ChainProvider);
     const poolCount = parseInt(await chefContract.poolLength(), 10);
     console.log(contract.name, poolCount);
 
     //read all pools info
-    const poolInfos = await Promise.all([...Array(poolCount).keys()].map((poolIndex) => chefContract.poolInfo(poolIndex)));
+    const poolInfos = await Promise.all(
+        [...Array(poolCount).keys()].map((poolIndex) => chefContract.poolInfo(poolIndex)));
 
     for (let id = 0; id < poolInfos.length; id++) {
       const pool = poolInfos[id];
       const allocPoints = pool.allocPoint ?? 1;
 
-      //do we have the token in the DB?
-      const token = tokens.find(
-          token => token.address.toLowerCase() === pool.lpToken.toLowerCase());
+      let token = tokens.find(token => token.address.toLowerCase() === pool.lpToken.toLowerCase());
 
-      if (token) {
+      //we don't have the token in DB
+      if (!token || (token && !token.symbol)) {
+        //get token and save it in DB
+        const unknownToken = await getBscToken(ChainProvider, pool.lpToken);
+        console.log('Identified token:', unknownToken.name, unknownToken.symbol);
+
+        //create/update token in DB
         try {
-          //create/update pools in DB
-          Pool.upsert({
-            poolId: id,
-            poolToken: token.name,  //db query
-            poolTokenAddress: pool.lpToken,
-            allocPoints: allocPoints.toNumber(),
-            MasterContractId: contract.id,
-          });
+          token = await Token.upsert(unknownToken);
         } catch (e) {
-          console.error(e);
+          console.log(e);
         }
-      } else {
-        console.log(
-            `Token ${pool.lpToken} not registered in pool ${id} from contract ${contract.name}`);
+      }
+
+      try {
+        //create/update pools in DB
+        Pool.upsert({
+          poolId: id,
+          poolToken: token.symbol,  //db query
+          poolTokenAddress: token.address,
+          allocPoints: allocPoints.toNumber(),
+          masterContractId: contract.id,
+        });
+      } catch (e) {
+        // const unknownToken = await getBscToken(ChainProvider, token.address)
+        console.error(e);
       }
     }
   }

@@ -11,16 +11,32 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // this.hasMany(models.Token);
+      // this.hasMany(models.Pool);
     }
   };
   Token.init({
-    name: DataTypes.STRING,
+    symbol: DataTypes.STRING,
     address: {type: DataTypes.STRING, unique: true},
+    isLP: {type: DataTypes.BOOLEAN, defaultValue: false},
+    name: DataTypes.STRING,
     type: {type: DataTypes.STRING, defaultValue: 'BEP20'}, //BEP20 etc
-    isLp: {type: DataTypes.BOOLEAN, defaultValue: false},
+    decimals: {type: DataTypes.INTEGER, defaultValue: 18},
+    totalSupply:{type: DataTypes.DOUBLE},
   }, {
     sequelize,
-    modelName: 'Token',
+    modelName: 'token',
   });
   return Token;
-};
+}
+
+/*
+TOKEN INFO:
+- address*
+- decimals*
+- name*
+- symbol
+- tokens (for LP) - hasMany
+- totalSupply*
+- staked (?)
+ */

@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.User);
+      this.belongsTo(models.user);
     }
   };
   Snapshot.init({
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     investments: DataTypes.JSON
   }, {
     sequelize,
-    modelName: 'Snapshot',
+    modelName: 'snapshot',
   });
   return Snapshot;
 };

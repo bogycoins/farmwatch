@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Provider);
-      this.hasMany(models.Pool, { onDelete: 'cascade' })
+      this.belongsTo(models.provider);
+      this.hasMany(models.pool, { onDelete: 'cascade' })
     }
   };
   MasterContract.init({
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     abi: DataTypes.JSON
   }, {
     sequelize,
-    modelName: 'MasterContract',
+    modelName: 'masterContract',
   });
   return MasterContract;
 };
